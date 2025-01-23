@@ -1,88 +1,61 @@
 <?php 
 session_start();
+
 ?>
 
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Supermarket Managemente</title>
-    <style>
-        table,
-        th,
-        td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 5px;
-        }
-
-        input[type=submit] {
-            margin-top: 10px;
-        }
-    </style>
+    <title>Supermarket Management</title>
 </head>
 
 <body>
-    <h1>Shopping list</h1>
-    <form method="post">
-        <label for="name">name:</label>
-        <input type="text" name="name" id="name" value="<?php echo $name; ?>">
+    <h1>Supermarket Management</h1>
+    <form action="Ejercicio01.php" method="post"> 
+        <label for="name">Worker name:</label>
+        <input type="text" name="name" id="name">
         <br>
-        <label for="quantity">quantity:</label>
+
+        <h2>Choose product:</h2>
+        <select name="product" value="<?php echo $product; ?>">
+        <option>Soft drink</option>
+        <option>Milk</option>
+        </select>
+        <br>
+
+        <h2>Product quantity:</h2>
+        <label for="quantity"></label>
         <input type="number" name="quantity" id="quantity" value="<?php echo $quantity; ?>">
-        <br>
-        <label for="price">price:</label>
-        <input type="number" name="price" id="price" value="<?php echo $price; ?>">
-        <br>
+        <br><br>
+
         <input type="hidden" name="index" value="<?php echo $index; ?>">
         <input type="submit" name="add" value="Add">
-        <input type="submit" name="update" value="Update">
+        <input type="submit" name="update" value="Remove">
         <input type="submit" name="reset" value="Reset">
+        <br>
+        <h2>Inventary: </h2>
+
+        <?php 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $_SESSION['name'] = $_POST['name'];
+            $_SESSION['product'] = $_POST['product'];
+            $_SESSION['quantity'] = $_POST['quantity'];
+        }
+        
+        if (isset($_SESSION['name'])) {
+            $name = $_SESSION['name'];
+            $product = $_SESSION['product'];
+            $quantity = $_SESSION['quantity'];
+            echo "worker: $name <br><br>";
+            echo "units milk: $product <br><br>";
+            echo "units soft milk: $quantity<br><br>";
+        } else {
+            echo "<h1>No session data found!</h1>";
+        }
+        ?>
+
     </form>
-    <p style="color:red;"><?php echo $error; ?></p>
-    <p style="color:green;"><?php echo $message; ?></p>
-    <table>
-        <thead>
-            <tr>
-                <th>name</th>
-                <th>quantity</th>
-                <th>price</th>
-                <th>cost</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($_SESSION['list'] as $index => $item) { ?>
-                <tr>
-                    <td><?php echo $item['name']; ?></td>
-                    <td><?php echo $item['quantity']; ?></td>
-                    <td><?php echo $item['price']; ?></td>
-                    <td><?php echo $item['quantity'] * $item['price']; ?></td>
-                    <td>
-                        <form method="post">
-                            <input type="hidden" name="name" value="<?php echo $item['name']; ?>">
-                            <input type="hidden" name="quantity" value="<?php echo $item['quantity']; ?>">
-                            <input type="hidden" name="price" value="<?php echo $item['price']; ?>">
-                            <input type="hidden" name="index" value="<?php echo $index; ?>">
-                            <input type="submit" name="edit" value="Edit">
-                            <input type="submit" name="delete" value="Delete">
-                        </form>
-                    </td>
-                </tr>
-            <?php } ?>
-            <tr>
-                <td colspan="3" align="right"><strong>Total:</strong></td>
-                <td><?php echo $totalValue; ?></td>
-                <td>
-                    <form method="post">
-                        <input type="submit" name="total" value="Calculate total">
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    
 </body>
