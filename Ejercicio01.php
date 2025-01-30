@@ -1,6 +1,52 @@
 <?php 
 session_start();
 
+if(!isset($_SESSION['soft'])) {
+    $_SESSION['soft'] = 0;
+}
+
+if(!isset($_SESSION['milk'])) {
+    $_SESSION['milk'] = 0;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['name'];
+    $product= $_POST['product'];
+    $quantity= $_POST['quantity'];
+
+    $_SESSION['name'] = $name;
+
+    if (isset($_POST['add'])) {
+        if($product == "Milk"){
+            $_SESSION['milk'] += $quantity;
+        }else{
+            $_SESSION['soft'] += $quantity;
+        }
+    }
+    if (isset($_POST['update'])) {
+        if($product == "Milk"){
+            if($_SESSION['milk']>0){
+                $_SESSION['milk'] -= $quantity;
+            }else{
+                echo "No tienes mas productos para eliminar";
+            }
+        }else{
+            if($_SESSION['soft']>0){
+                $_SESSION['soft'] -= $quantity;
+            }else{
+                echo "<h3>No tienes mas productos para eliminar!<h3>";
+            }
+        }
+    }
+
+    if (isset($_POST['reset'])) {
+        $_SESSION['soft'] = 0;
+        $_SESSION['milk'] = 0;
+        $_SESSION['name'] = "";
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -36,21 +82,15 @@ session_start();
         <br>
         <h2>Inventary: </h2>
 
-        <?php 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $_SESSION['name'] = $_POST['name'];
-            $_SESSION['product'] = $_POST['product'];
-            $_SESSION['quantity'] = $_POST['quantity'];
-        }
+        <?php
         
         if (isset($_SESSION['name'])) {
             $name = $_SESSION['name'];
-            $product = $_SESSION['product'];
-            $quantity = $_SESSION['quantity'];
+            $quantitymilk = $_SESSION['milk'];
+            $quantitysoft = $_SESSION['soft'];
             echo "worker: $name <br><br>";
-            echo "units milk: $product <br><br>";
-            echo "units soft milk: $quantity<br><br>";
+            echo "units milk: $quantitymilk <br><br>";
+            echo "units soft milk: $quantitysoft<br><br>";
         } else {
             echo "<h1>No session data found!</h1>";
         }
