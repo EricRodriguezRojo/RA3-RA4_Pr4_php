@@ -5,7 +5,7 @@ $position = $_POST['position']; //guardamos la posicion y el valor en 2 variable
 $value = $_POST['value'];
 
 if (!isset($_SESSION['lista'])) {
-    $_SESSION['lista'] = array(10, 20, 30);
+    $_SESSION['lista'] = [array(10, 20, 30)];
 }
 
 if (isset($_POST['modify'])) { //modificar sesion lista
